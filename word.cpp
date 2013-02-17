@@ -4,6 +4,16 @@
 
 using namespace std;
 
+Word::Word()
+{
+
+}//constructor
+
+Word::~Word()
+{
+
+}//destructor
+
 void Word::complete(comlete Dict &d)
 {
 

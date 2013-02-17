@@ -4,6 +4,16 @@
 
 using namespace std;
 
+Phrase::Phrase()
+{
+
+}//constructor
+
+Phrase::~Phrase()
+{
+
+}//destructor
+
 void Phrase::complete(comlete Dict &d)
 {
 

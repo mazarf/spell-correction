@@ -4,6 +4,16 @@
 
 using namespace std;
 
+Sentence::Sentence()
+{
+
+}//constructor
+
+Sentence::~Sentence()
+{
+
+}//destructor
+
 void Sentence::complete(comlete Dict &d)
 {
 
