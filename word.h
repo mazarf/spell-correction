@@ -5,6 +5,8 @@
 class Word : public Element
 {
 public:
+	Word();
+	~Word();
 	void complete(const Dict &d);
 	void check(const Dict &d);
 	void show() const = 0;

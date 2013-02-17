@@ -5,6 +5,8 @@
 class Sentence : public Element
 {
 public:
+	Sentence();
+	~Sentence();
 	void complete(const Dict &d);
 	void check(const Dict &d);
 	void show() const = 0;
