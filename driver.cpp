@@ -9,7 +9,7 @@ int main()
 {
 
   cout << "Instatiating Dict object:" << endl;
-  Dict d("dict.txt");
+  Dict d("data.txt");
   return 0;
 
 } // main
