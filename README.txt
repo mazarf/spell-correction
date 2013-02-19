@@ -8,8 +8,9 @@ dict.h
 dict.cpp
 --------
 -Created functions store_words, store_phrases, store_sentences, and resize
--store_words() reads the entire file and stores every single word in a dynamically allocatedarray of C++ strings. Punctuation is removed. Doesn't filter out duplicates yet.
+-store_words() reads the entire file and stores every single word in a dynamically allocatedarray of C++ strings. Punctuation is removed. Filters out duplicates using is_duplicate().
 -resize() takes the current array size, doubles it, and creates a bigger array with the old data.  Initial size is 50 but could be easily changed. Also, the function is very general and could be applied to phrases and sentences as well.
+-function is_duplicate() compares the current string to every previous one, it returns true if there's a match and false if it's unique.
 -other functions not defined yet
 
 element.h

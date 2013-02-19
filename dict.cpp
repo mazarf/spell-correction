@@ -27,10 +27,20 @@ void Dict::store_words()
   {
 
     reference >> words[i];
-    if(reference.eof()) break;
+    if(reference.eof()) break; // may need to move this further down
 
     if(!isalpha(words[i][words[i].length() - 1]))
         words[i][words[i].length() - 1] = '\0'; // get rid of punctuation
+
+    if(is_duplicate(words, i))
+    {
+
+      // pretend it never happened...
+
+      i--;
+      continue;
+
+    } // if
 
     current_count++;
 
@@ -67,6 +77,23 @@ void Dict::resize(string *&old_array, int &current_size)
   cout << "Resize instantiated successfully" << endl;
 
 } // resize()
+
+bool Dict::is_duplicate(string *&array, int &current_index)
+{
+
+  for(int i = 0; i < current_index; i++)
+  {
+
+    if(array[current_index] == array[i])
+      return true;
+
+  } // for i
+
+  // if we get to this point, the string is unique
+
+  return false;
+
+} // is_duplicate()
 
 Dict::~Dict()
 {
