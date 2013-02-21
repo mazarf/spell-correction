@@ -32,7 +32,7 @@ void Dict::store_words()
     if(reference.eof()) break; // may need to move this further down
 
     if(!isalpha(words[i][words[i].length() - 1]))
-        words[i][words[i].length() - 1] = '\0'; // get rid of punctuation
+        words[i].resize(words[i].length() -1); // get rid of punctuation
 
     if(is_duplicate(words, i))
     {
@@ -46,7 +46,7 @@ void Dict::store_words()
 
     current_count++;
 
-    //cout << i << ": " << words[i] << endl;
+    cout << i << ": " << words[i] << endl;
     
     if(current_count == current_size)
       resize(words, current_size);
@@ -71,20 +71,28 @@ void Dict::store_sentences()
   cout << "Store sentences called successfully" << endl;
 
   int current_size = INIT_SIZE;
+  int current_count = 0;
   char temp[9999]; // ifstreams can't take 'string' arguments for some reason
 
   sentences = new string[current_size];
 
-  for(int i = 0; i < current_size; i++)
+  for(int i = 0; i < current_size && !reference.eof(); i++)
   {
 
     reference.getline(temp, 9999,'.');
 
     sentences[i] = temp;
     
-    cout << i << ": " << sentences[i] << endl;
+    //cout << i << ": " << sentences[i] << endl;
+    
+    current_count++;
+
+    if(current_count == current_size)
+      resize(sentences, current_size);
 
   } // for i
+
+  current_count--; // empty string at the end for some reason
 
   // works, but results in strange formatting, 
   // probably because of tabs and newlines
@@ -132,6 +140,7 @@ bool Dict::is_duplicate(string *&array, int &current_index)
   // NOTE: I noticed that some duplicate strings are getting in.
   //       They have a '^@' character in vi. I think it's because
   //       I didn't get rid of the periods correctly.
+  // 2/20/13: Fixed it! Apparently C++ strings don't terminate with '\0'
 
   return false;
 
