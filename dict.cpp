@@ -18,7 +18,9 @@ Dict::Dict(string f) : INIT_SIZE(50)
 
   store_words(); // scan for and store all unique words
 
-  store_sentences(); // same, but for sentences that end with a period
+  //store_sentences(); // same, but for sentences that end with a period
+
+  store_phrases();
 
 
 }//constructor
@@ -27,6 +29,8 @@ Dict::Dict(string f) : INIT_SIZE(50)
 
 void Dict::store_words()
 {
+  cout << "Store sentences called successfully" << endl;
+
   int current_size = INIT_SIZE;
   int current_count = 0;
 
@@ -65,10 +69,85 @@ void Dict::store_words()
   reference.clear(); // reset eof value and stuff
   reference.seekg(0, std::ios::beg); // move back to start of file
 
-  cout << "Current count: " << current_count << endl;
+  cout << "Current count (words): " << current_count << endl;
   cout << "done" << endl;
 
 } // store_words()
+
+
+
+void Dict::store_phrases()
+{
+
+  cout << "Store phrases called successfully" << endl;
+
+  int current_size = INIT_SIZE;
+  char temp[80];
+  int current_count = 0;
+  int combinations = 0; // used to determine how many shifts
+                        // are needed to get every phrase combo
+
+  phrases = new string[current_size];
+
+  for(int i = 2; i <= 2; i++) // for every phrase length
+  {
+
+    combinations = i - 1;
+
+    for(int j = current_count; j < current_size && !reference.eof(); j++)
+    {
+
+      for(int k = 1; k <= i; k++)
+      {
+
+        reference >> temp;
+        if(reference.eof()) break; // done, break out of k loop
+        phrases[j] = phrases[j] + temp + ' ';
+
+      }
+
+      // need to get rid of extra space here
+      
+      // go through every possible combination of i words, or break
+      
+      if(reference.eof())
+      {
+        if(combinations < i)
+        {
+
+          reference.clear(); // reset eof value and stuff
+          reference.seekg(0, std::ios::beg); // move back to start of file
+
+          for(int m = 0; m < combinations; m++)
+            reference >> temp; // skip a word
+
+          combinations++;
+
+          continue; // restart the loop
+
+        }
+        else // did every possible combination, break out of j
+          break;
+      }
+
+
+      current_count++;
+
+      if(current_count == current_size)
+        resize(phrases, current_size);
+
+      cout << j << ": " << phrases[j] << endl;
+
+    }
+
+    // finished with i-word phrases
+    
+    reference.clear();
+    reference.seekg(0, std::ios::beg);
+
+  }
+
+} // store_phrases()
 
 
 
@@ -90,17 +169,19 @@ void Dict::store_sentences()
 
     sentences[i] = temp;
 
-    for(int j = 0; j < static_cast<int>(sentences[i].length()); j++) // replace all newlines with spaces
-      if(sentences[i][j] == '\n')
+    for(int j = 0; j < static_cast<int>(sentences[i].length()); j++) // replace all newlines
+      if(sentences[i][j] == '\n')                                    // with spaces
         sentences[i][j] = ' ';
 
-    // not too happy about this function which i got from the internet. needs #include <algorithm>.
-    // it removes all of the '\t's by shifting the array to cover them every time it finds one
+    // not too happy about this function which i got from
+    // the internet. needs #include <algorithm>. it removes
+    // all of the '\t's by shifting the array to cover them
+    // every time it finds one
 
     sentences[i].erase(remove(sentences[i].begin(), sentences[i].end(), '\t'),
         sentences[i].end());
     
-    cout << i << ": " << sentences[i] << endl;
+    //cout << i << ": " << sentences[i] << endl;
 
     if(is_duplicate(sentences, i))
     {
@@ -120,6 +201,7 @@ void Dict::store_sentences()
   current_count--; // empty string at the end for some reason
 
   cout << "Current count (sentences): " << current_count << endl;
+  cout << "done" << endl;
 
 } // store_sentences()
 
@@ -176,6 +258,7 @@ Dict::~Dict()
 {
 
   delete[] words;
-  delete[] sentences;
+  delete[] phrases;
+  //delete[] sentences;
 
 }//destructor
