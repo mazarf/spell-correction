@@ -1,5 +1,12 @@
 //Mazar Farran & Corbin Gomez
 #include "dict.h"
+#include <algorithm>
+
+/* Goal: 
+ * 1643 unique words (1643)
+ * 766 unique sentences (766)
+ * 33508 unique phrases (0)
+ */
 
 Dict::Dict(string f) : INIT_SIZE(50)
 {
@@ -46,7 +53,7 @@ void Dict::store_words()
 
     current_count++;
 
-    cout << i << ": " << words[i] << endl;
+    //cout << i << ": " << words[i] << endl;
     
     if(current_count == current_size)
       resize(words, current_size);
@@ -82,8 +89,26 @@ void Dict::store_sentences()
     reference.getline(temp, 9999,'.');
 
     sentences[i] = temp;
+
+    for(int j = 0; j < static_cast<int>(sentences[i].length()); j++) // replace all newlines with spaces
+      if(sentences[i][j] == '\n')
+        sentences[i][j] = ' ';
+
+    // not too happy about this function which i got from the internet. needs #include <algorithm>.
+    // it removes all of the '\t's by shifting the array to cover them every time it finds one
+
+    sentences[i].erase(remove(sentences[i].begin(), sentences[i].end(), '\t'),
+        sentences[i].end());
     
-    //cout << i << ": " << sentences[i] << endl;
+    cout << i << ": " << sentences[i] << endl;
+
+    if(is_duplicate(sentences, i))
+    {
+
+      i--;
+      continue;
+
+    } // if
     
     current_count++;
 
@@ -94,8 +119,7 @@ void Dict::store_sentences()
 
   current_count--; // empty string at the end for some reason
 
-  // works, but results in strange formatting, 
-  // probably because of tabs and newlines
+  cout << "Current count (sentences): " << current_count << endl;
 
 } // store_sentences()
 
