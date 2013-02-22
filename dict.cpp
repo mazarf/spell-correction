@@ -89,10 +89,10 @@ void Dict::store_phrases()
 
   phrases = new string[current_size];
 
-  for(int i = 2; i <= 2; i++) // for every phrase length
+  for(int i = 2; i <= 5; i++) // for every phrase length
   {
 
-    combinations = i - 1;
+    combinations = 1;
 
     for(int j = current_count; j < current_size && !reference.eof(); j++)
     {
@@ -102,11 +102,14 @@ void Dict::store_phrases()
 
         reference >> temp;
         if(reference.eof()) break; // done, break out of k loop
+
+        if(temp[strlen(temp) - 1] == '.')
+          temp[strlen(temp) - 1] = '\0';  // get rid of period
+
         phrases[j] = phrases[j] + temp + ' ';
 
       }
 
-      // need to get rid of extra space here
       
       // go through every possible combination of i words, or break
       
@@ -122,13 +125,28 @@ void Dict::store_phrases()
             reference >> temp; // skip a word
 
           combinations++;
+          current_count++;
 
+          if(current_count == current_size)
+          resize(phrases, current_size); // necessary because the
+                                         // resize below will be skipped
+                                         
           continue; // restart the loop
 
         }
         else // did every possible combination, break out of j
           break;
       }
+
+
+      phrases[j].resize(phrases[j].length() - 1); // remove extra space
+
+      if(is_duplicate(phrases, j))
+      {
+        phrases[j].clear(); // need to do this because i'm adding to the string
+        j--;
+        continue;
+      } // if
 
 
       current_count++;
