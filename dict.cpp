@@ -205,7 +205,10 @@ void Dict::store_sentences()
   for(int i = 0; i < current_size && !reference.eof(); i++)
   {
 
-    reference.getline(temp, 9999,'.');
+    if(reference.peek() == ' ') // skip spaces
+      reference.ignore();
+
+    reference.getline(temp, 9999, '.');
 
     sentences[i] = temp;
 
@@ -213,14 +216,12 @@ void Dict::store_sentences()
       if(sentences[i][j] == '\n')                                    // with spaces
         sentences[i][j] = ' ';
 
-    // not too happy about this function which i got from
-    // the internet. needs #include <algorithm>. it removes
-    // all of the '\t's by shifting the array to cover them
-    // every time it finds one
+    //sentences[i].erase(remove(sentences[i].begin(), sentences[i].end(), '\t'),
+    //    sentences[i].end());
 
-    sentences[i].erase(remove(sentences[i].begin(), sentences[i].end(), '\t'),
-        sentences[i].end());
-    
+    remove_char(sentences[i], '\t');
+    sentences[i].resize(sentences[i].length() + 1, '.');
+
     //cout << i << ": " << sentences[i] << endl;
 
     if(is_duplicate(sentences, i))
@@ -271,7 +272,7 @@ void Dict::resize(string *&old_array, int &current_size)
 
 
 
-bool Dict::is_duplicate(string *&array, int &current_index)
+inline bool Dict::is_duplicate(string *&array, int &current_index)
 {
 
   for(int i = 0; i < current_index; i++)
@@ -291,6 +292,27 @@ bool Dict::is_duplicate(string *&array, int &current_index)
   return false;
 
 } // is_duplicate()
+
+
+inline void Dict::remove_char(string s, char c)
+{
+
+  for(int i = 0; i < static_cast<int>(s.length() - 1); i++)
+  {
+
+    if(s[i] == c)
+    {
+
+      for(int j = i - 1; j < static_cast<int>(s.length()); j++)
+        s[j] = s[j + 1];
+
+      s.resize(s.length() - 1);
+     
+    } // if
+
+  } // for i
+
+} // remove_char()
 
 
 

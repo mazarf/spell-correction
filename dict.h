@@ -22,8 +22,9 @@ public:
   void store_sentences();
           // ref to string ptr  // ref to int
   void resize(string *&old_array, int &current_size);
-  bool is_duplicate(string *&array, int &current_index); // I have no idea why these
-                                                         // need to be refs
+  inline bool is_duplicate(string *&array, int &current_index); // idk why, but need to be
+                                                                // refs
+  inline void remove_char(string s, char c);
 
 private:
 	/*
