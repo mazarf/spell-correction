@@ -5,22 +5,22 @@
 /* Goal: 
  * 1643 unique words (1643)
  * 766 unique sentences (766)
- * 33508 unique phrases (0)
+ * 33508 unique phrases (33515)
  */
 
 Dict::Dict(string f) : INIT_SIZE(50)
 {
 
   //ifstream reference; // decided to make this a member 
-  reference.open(&f[0]); // makes the file stream point to the file
+  reference.open(f.c_str()); // makes the file stream point to the file
 
   cout << "Dict object successfully instantiated" << endl;
 
   store_words(); // scan for and store all unique words
 
-  //store_sentences(); // same, but for sentences that end with a period
-
   store_phrases();
+
+  store_sentences(); // same, but for sentences that end with a period
 
 
 }//constructor
@@ -29,7 +29,7 @@ Dict::Dict(string f) : INIT_SIZE(50)
 
 void Dict::store_words()
 {
-  cout << "Store sentences called successfully" << endl;
+  cout << "Store words called successfully" << endl;
 
   int current_size = INIT_SIZE;
   int current_count = 0;
@@ -59,8 +59,8 @@ void Dict::store_words()
 
     //cout << i << ": " << words[i] << endl;
     
-    if(current_count == current_size)
-      resize(words, current_size);
+    //if(current_count == current_size)
+      //resize(words, current_size);
 
   } // for i
 
@@ -82,6 +82,7 @@ void Dict::store_phrases()
   cout << "Store phrases called successfully" << endl;
 
   int current_size = INIT_SIZE;
+  bool has_period = false;
   char temp[80];
   int current_count = 0;
   int combinations = 0; // used to determine how many shifts
@@ -97,18 +98,26 @@ void Dict::store_phrases()
     for(int j = current_count; j < current_size && !reference.eof(); j++)
     {
 
-      for(int k = 1; k <= i; k++)
+      int k;
+      for(k = 1; k <= i; k++)
       {
 
         reference >> temp;
         if(reference.eof()) break; // done, break out of k loop
 
         if(temp[strlen(temp) - 1] == '.')
-          temp[strlen(temp) - 1] = '\0';  // get rid of period
+        {
+
+          if(k < i) // period in the middle. not a phrase
+            has_period = true;
+          else
+            temp[strlen(temp) - 1] = '\0';  // get rid of period
+
+        } // if
 
         phrases[j] = phrases[j] + temp + ' ';
 
-      }
+      } // for k
 
       
       // go through every possible combination of i words, or break
@@ -133,11 +142,18 @@ void Dict::store_phrases()
                                          
           continue; // restart the loop
 
-        }
+        } // if
         else // did every possible combination, break out of j
           break;
-      }
+      } // if
 
+      if(has_period)
+      {
+        phrases[j].clear();
+        j--;
+        has_period = false;
+        continue;
+      } // if
 
       phrases[j].resize(phrases[j].length() - 1); // remove extra space
 
@@ -164,6 +180,7 @@ void Dict::store_phrases()
     reference.seekg(0, std::ios::beg);
 
   }
+
 
 } // store_phrases()
 
