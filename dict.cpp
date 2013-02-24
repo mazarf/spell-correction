@@ -43,7 +43,7 @@ void Dict::store_words()
     if(reference.eof()) break; // may need to move this further down
 
     if(!isalpha(words[i][words[i].length() - 1]))
-        words[i].resize(words[i].length() -1); // get rid of punctuation
+        words[i].resize(words[i].length() - 1); // get rid of punctuation
 
     if(is_duplicate(words, i))
     {
@@ -94,9 +94,12 @@ void Dict::store_phrases()
   {
 
     combinations = 1;
+    has_period = false;
 
     for(int j = current_count; j < current_size && !reference.eof(); j++)
     {
+
+      has_period = false;
 
       int k;
       for(k = 1; k <= i; k++)
@@ -124,6 +127,8 @@ void Dict::store_phrases()
       
       if(reference.eof())
       {
+        phrases[j].clear();
+
         if(combinations < i)
         {
 
@@ -134,12 +139,10 @@ void Dict::store_phrases()
             reference >> temp; // skip a word
 
           combinations++;
-          current_count++;
-
-          if(current_count == current_size)
-          resize(phrases, current_size); // necessary because the
-                                         // resize below will be skipped
-                                         
+          if(current_count >= current_size)
+            resize(phrases, current_size); // necessary because the
+                                           // resize below will be skipped
+          j--;
           continue; // restart the loop
 
         } // if
@@ -170,7 +173,7 @@ void Dict::store_phrases()
       if(current_count == current_size)
         resize(phrases, current_size);
 
-      cout << j << ": " << phrases[j] << endl;
+      //cout << j << ": " << phrases[j] << endl;
 
     }
 
@@ -181,6 +184,8 @@ void Dict::store_phrases()
 
   }
 
+  cout << "Current count (phrases): " << current_count << endl;
+  cout << "done" << endl;
 
 } // store_phrases()
 
@@ -294,6 +299,6 @@ Dict::~Dict()
 
   delete[] words;
   delete[] phrases;
-  //delete[] sentences;
+  delete[] sentences;
 
 }//destructor
