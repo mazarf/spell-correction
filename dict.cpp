@@ -59,8 +59,8 @@ void Dict::store_words()
 
     //cout << i << ": " << words[i] << endl;
     
-    //if(current_count == current_size)
-      //resize(words, current_size);
+    if(current_count == current_size)
+      resize(words, current_size);
 
   } // for i
 
