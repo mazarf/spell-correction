@@ -25,6 +25,7 @@ public:
   inline bool is_duplicate(string *&array, int &current_index); // idk why, but need to be
                                                                 // refs
   inline void remove_char(string s, char c);
+  void alphabetize(string *array, int size);
 
 private:
 	/*
@@ -38,6 +39,10 @@ private:
   string *words;
   string *phrases;
   string *sentences;
+  
+  int word_count;
+  int phrase_count;
+  int sentence_count;
 
   const int INIT_SIZE;
 

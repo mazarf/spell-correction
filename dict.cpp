@@ -1,6 +1,6 @@
 //Mazar Farran & Corbin Gomez
 #include "dict.h"
-#include <algorithm>
+//#include <algorithm>
 
 /* Goal: 
  * 1643 unique words (1643)
@@ -16,11 +16,18 @@ Dict::Dict(string f) : INIT_SIZE(50)
 
   cout << "Dict object successfully instantiated" << endl;
 
+  words = new string[INIT_SIZE];
+  phrases = new string[INIT_SIZE];
+  sentences = new string[INIT_SIZE];
+
+
   store_words(); // scan for and store all unique words
-
   store_phrases();
-
   store_sentences(); // same, but for sentences that end with a period
+
+  alphabetize(words, word_count);
+  alphabetize(phrases, phrase_count);
+  alphabetize(sentences, sentence_count);
 
 
 }//constructor
@@ -33,8 +40,6 @@ void Dict::store_words()
 
   int current_size = INIT_SIZE;
   int current_count = 0;
-
-  words = new string[current_size];
 
   for(int i = 0; i < current_size && !reference.eof(); i++)
   {
@@ -69,6 +74,8 @@ void Dict::store_words()
   reference.clear(); // reset eof value and stuff
   reference.seekg(0, std::ios::beg); // move back to start of file
 
+  word_count = current_count;
+
   cout << "Current count (words): " << current_count << endl;
   cout << "done" << endl;
 
@@ -88,8 +95,6 @@ void Dict::store_phrases()
   int combinations = 0; // used to determine how many shifts
                         // are needed to get every phrase combo
 
-  phrases = new string[current_size];
-
   for(int i = 2; i <= 5; i++) // for every phrase length
   {
 
@@ -101,8 +106,7 @@ void Dict::store_phrases()
 
       has_period = false;
 
-      int k;
-      for(k = 1; k <= i; k++)
+      for(int k = 1; k <= i; k++)
       {
 
         reference >> temp;
@@ -139,9 +143,6 @@ void Dict::store_phrases()
             reference >> temp; // skip a word
 
           combinations++;
-          if(current_count >= current_size)
-            resize(phrases, current_size); // necessary because the
-                                           // resize below will be skipped
           j--;
           continue; // restart the loop
 
@@ -184,6 +185,8 @@ void Dict::store_phrases()
 
   }
 
+  phrase_count = current_count;
+
   cout << "Current count (phrases): " << current_count << endl;
   cout << "done" << endl;
 
@@ -199,8 +202,6 @@ void Dict::store_sentences()
   int current_size = INIT_SIZE;
   int current_count = 0;
   char temp[9999]; // ifstreams can't take 'string' arguments for some reason
-
-  sentences = new string[current_size];
 
   for(int i = 0; i < current_size && !reference.eof(); i++)
   {
@@ -219,7 +220,7 @@ void Dict::store_sentences()
     //sentences[i].erase(remove(sentences[i].begin(), sentences[i].end(), '\t'),
     //    sentences[i].end());
 
-    remove_char(sentences[i], '\t');
+    remove_char(sentences[i], '\t'); // helper function
     sentences[i].resize(sentences[i].length() + 1, '.');
 
     //cout << i << ": " << sentences[i] << endl;
@@ -240,6 +241,8 @@ void Dict::store_sentences()
   } // for i
 
   current_count--; // empty string at the end for some reason
+
+  sentence_count = current_count;
 
   cout << "Current count (sentences): " << current_count << endl;
   cout << "done" << endl;
@@ -294,6 +297,11 @@ inline bool Dict::is_duplicate(string *&array, int &current_index)
 } // is_duplicate()
 
 
+
+// finds all instances of the specified char in the string
+// and removes them by shifting every character in front of
+// them over to the right
+
 inline void Dict::remove_char(string s, char c)
 {
 
@@ -315,6 +323,34 @@ inline void Dict::remove_char(string s, char c)
 } // remove_char()
 
 
+
+// reused Sean Davis's insertion sort algorithm
+
+void Dict::alphabetize(string *array, int size)
+{
+
+  cout << "worked" << endl;
+
+  string temp;
+
+  int j; // must be declared here to exist outside the loop
+
+  for(int i = 1; i < size; i++)
+  {
+    temp = array[i];
+
+    for(j = i - 1; j >= 0 && array[j] > temp; j--)
+      array[j + 1] = array[j];
+
+    array[j + 1] = temp;
+
+  } // for
+
+  for(int i = 0; i < size; i++)
+    cout << i << ": " << array[i] << endl;
+
+
+} // alphabetize()
 
 Dict::~Dict()
 {
