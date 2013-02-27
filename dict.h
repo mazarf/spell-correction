@@ -3,16 +3,17 @@
 #define DICT_H
 
 #include <string>
-#include <vector>
 #include <iostream>
-#include <fstream>
-#include <cctype>
-#include <cstring>
+#include <fstream> // for the file input stream (reference)
+#include <cctype>  // for isalpha()
+#include <cstring> // for strlen()
+#include <cstdlib> // for qsort
 
 using namespace std;
 
 class Dict
 {
+
 public:
 	Dict(string f);
 	~Dict();
@@ -25,7 +26,8 @@ public:
   inline bool is_duplicate(string *&array, int &current_index); // idk why, but need to be
                                                                 // refs
   inline void remove_char(string s, char c);
-  void alphabetize(string *array, int size);
+  //void alphabetize(string *array, int size); // obsolete with qsort
+  static int compare(const void* a, const void* b); // compares two strings, necessary for qsort
 
 private:
 	/*

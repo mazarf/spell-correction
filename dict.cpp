@@ -1,11 +1,10 @@
 //Mazar Farran & Corbin Gomez
 #include "dict.h"
-//#include <algorithm>
 
 /* Goal: 
  * 1643 unique words (1643)
  * 766 unique sentences (766)
- * 33508 unique phrases (33515)
+ * 33508 unique phrases (33508)
  */
 
 Dict::Dict(string f) : INIT_SIZE(50)
@@ -25,9 +24,16 @@ Dict::Dict(string f) : INIT_SIZE(50)
   store_phrases();
   store_sentences(); // same, but for sentences that end with a period
 
-  alphabetize(words, word_count);
-  alphabetize(phrases, phrase_count);
-  alphabetize(sentences, sentence_count);
+  qsort(words, word_count, sizeof(string), compare);
+  qsort(phrases, phrase_count, sizeof(string), compare);
+  qsort(sentences, sentence_count, sizeof(string), compare);
+
+  //for(int i = 0; i < word_count; i++)
+  //  cout << words[i] << endl;
+  for(int i = 0; i < phrase_count; i++)
+    cout << phrases[i] << endl;
+  //for(int i = 0; i < sentence_count; i++)
+  //  cout << sentences[i] << endl;
 
 
 }//constructor
@@ -326,7 +332,7 @@ inline void Dict::remove_char(string s, char c)
 
 // reused Sean Davis's insertion sort algorithm
 
-void Dict::alphabetize(string *array, int size)
+/*void Dict::alphabetize(string *array, int size)
 {
 
   cout << "worked" << endl;
@@ -350,7 +356,20 @@ void Dict::alphabetize(string *array, int size)
     cout << i << ": " << array[i] << endl;
 
 
-} // alphabetize()
+} // alphabetize()*/
+
+int Dict::compare(const void* a, const void* b)
+{
+
+  if(*(string*)a < *(string*)b) 
+    return -1;
+  else // string a doesn't go before string b
+    if(*(string*)a == *(string*)b)
+      return 0; // this shouldn't happen anyway since the strings are unique
+    else // string isn't the same as string a
+      return 1;
+
+}
 
 Dict::~Dict()
 {

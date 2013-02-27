@@ -15,6 +15,7 @@ dict.cpp
 -remove_char() is a helper function for store_sentences() that is used to remove the '\t's from each sentence.
 -store_phrases parses every possible phrase (33,508!) of 2-5 words, and puts them in an array.  Naturally, this is the most resource intensive and complex function.
 -alphabetize() takes a specified array of a specified size, and arranges its contents in alphabetical order. Note: VERY slow on phrases
+-created compare() to be used with qsort(), which replaces alphabetize() since it's much faster
 
 -now we need member functions that allow access to the dictionary contents.  should be trivial and we could work it out as needed.
 
