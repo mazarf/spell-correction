@@ -3,7 +3,29 @@ Mazar Farran & Corbin Gomez
 
 dict.h
 ------
--Declared constructor and destructor.
+-Declared methods:
+	-constructor
+	-destructor
+	-store_words()
+	-store_phrases()
+	-store_sentences()
+	-resize()
+	-is_duplicate()
+	-remove_char()
+	-compare()
+	-get_word()
+	-get_phrase()
+	-get_sentence()
+	-get_word_count()
+	-get_phrase_count()
+	-get_sentence_count()
+-Declared data members:
+	-ifstream reference;
+	-arrays to hold words, phrases and sentences
+	-word, phrase and sentence counts
+	-and a constant of initial array size
+-Included header files:
+	-string, iostream, fstream, cctype, ctring, stdlib
 
 dict.cpp
 --------
@@ -23,23 +45,23 @@ element.h
 ---------
 -declared 3 pure virtual functions: complete(), check(), show()
 
-phrase.h
---------
--Declared constructor, destructor, and member functions complete(), check(), and show();
+phrase.h, sentence.h, word.h
+----------------------------
+-Declared methods:
+	-constructor
+	-destructor
+	-complete()
+	-check()
+	-show()
+	-completion_hammer() and correction_hammer(), which calculate hamming distances
+	-has_same_start(), which checks to see if two strings have the same starting chars
+-Declared data members:
+	-input
+	-completions, an array of strings
+	-para_completions, an array of ints parallel to completions[] that holds respective hamming distances
+	-corrections, an array of strings
+	-para_corrections, an array of ints parallel to corrections[] that holds respectie hamming distances
 
-phrase.cpp
+phrase.cpp, sentence.cpp, word.cpp
 ----------
-
-sentence.h
-----------
--Declared constructor, destructor, and member functions complete(), check(), and show();
-
-sentence.cpp
-------------
-
-word.h
-------
--Declared constructor, destructor, and member functions complete(), check(), and show();
-
-word.cpp
---------
+-Implemented methods

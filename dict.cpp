@@ -13,7 +13,7 @@ Dict::Dict(string f) : INIT_SIZE(50)
   //ifstream reference; // decided to make this a member 
   reference.open(f.c_str()); // makes the file stream point to the file
 
-  cout << "Dict object successfully instantiated" << endl;
+  //cout << "Dict object successfully instantiated" << endl;
 
   words = new string[INIT_SIZE];
   phrases = new string[INIT_SIZE];
@@ -29,11 +29,11 @@ Dict::Dict(string f) : INIT_SIZE(50)
   qsort(sentences, sentence_count, sizeof(string), compare);
 
   //for(int i = 0; i < word_count; i++)
-  //  cout << words[i] << endl;
-  for(int i = 0; i < phrase_count; i++)
-    cout << phrases[i] << endl;
+  //  //cout << words[i] << endl;
+  //for(int i = 0; i < phrase_count; i++)
+    //cout << phrases[i] << endl;
   //for(int i = 0; i < sentence_count; i++)
-  //  cout << sentences[i] << endl;
+  //  //cout << sentences[i] << endl;
 
 
 }//constructor
@@ -42,7 +42,7 @@ Dict::Dict(string f) : INIT_SIZE(50)
 
 void Dict::store_words()
 {
-  cout << "Store words called successfully" << endl;
+  //cout << "Store words called successfully" << endl;
 
   int current_size = INIT_SIZE;
   int current_count = 0;
@@ -68,7 +68,7 @@ void Dict::store_words()
 
     current_count++;
 
-    //cout << i << ": " << words[i] << endl;
+    ////cout << i << ": " << words[i] << endl;
     
     if(current_count == current_size)
       resize(words, current_size);
@@ -82,8 +82,8 @@ void Dict::store_words()
 
   word_count = current_count;
 
-  cout << "Current count (words): " << current_count << endl;
-  cout << "done" << endl;
+  //cout << "Current count (words): " << current_count << endl;
+  //cout << "done" << endl;
 
 } // store_words()
 
@@ -92,7 +92,7 @@ void Dict::store_words()
 void Dict::store_phrases()
 {
 
-  cout << "Store phrases called successfully" << endl;
+  //cout << "Store phrases called successfully" << endl;
 
   int current_size = INIT_SIZE;
   bool has_period = false;
@@ -180,7 +180,7 @@ void Dict::store_phrases()
       if(current_count == current_size)
         resize(phrases, current_size);
 
-      //cout << j << ": " << phrases[j] << endl;
+      ////cout << j << ": " << phrases[j] << endl;
 
     }
 
@@ -193,8 +193,8 @@ void Dict::store_phrases()
 
   phrase_count = current_count;
 
-  cout << "Current count (phrases): " << current_count << endl;
-  cout << "done" << endl;
+  //cout << "Current count (phrases): " << current_count << endl;
+  //cout << "done" << endl;
 
 } // store_phrases()
 
@@ -203,7 +203,7 @@ void Dict::store_phrases()
 void Dict::store_sentences()
 {
 
-  cout << "Store sentences called successfully" << endl;
+  //cout << "Store sentences called successfully" << endl;
 
   int current_size = INIT_SIZE;
   int current_count = 0;
@@ -229,7 +229,7 @@ void Dict::store_sentences()
     remove_char(sentences[i], '\t'); // helper function
     sentences[i].resize(sentences[i].length() + 1, '.');
 
-    //cout << i << ": " << sentences[i] << endl;
+    ////cout << i << ": " << sentences[i] << endl;
 
     if(is_duplicate(sentences, i))
     {
@@ -250,8 +250,8 @@ void Dict::store_sentences()
 
   sentence_count = current_count;
 
-  cout << "Current count (sentences): " << current_count << endl;
-  cout << "done" << endl;
+  //cout << "Current count (sentences): " << current_count << endl;
+  //cout << "done" << endl;
 
 } // store_sentences()
 
@@ -275,7 +275,7 @@ void Dict::resize(string *&old_array, int &current_size)
 
   old_array = new_array;
 
-  cout << "Resize called successfully" << endl;
+  //cout << "Resize called successfully" << endl;
 
 } // resize()
 
@@ -335,7 +335,7 @@ inline void Dict::remove_char(string s, char c)
 /*void Dict::alphabetize(string *array, int size)
 {
 
-  cout << "worked" << endl;
+  //cout << "worked" << endl;
 
   string temp;
 
@@ -353,7 +353,7 @@ inline void Dict::remove_char(string s, char c)
   } // for
 
   for(int i = 0; i < size; i++)
-    cout << i << ": " << array[i] << endl;
+    //cout << i << ": " << array[i] << endl;
 
 
 } // alphabetize()*/
@@ -369,6 +369,36 @@ int Dict::compare(const void* a, const void* b)
     else // string isn't the same as string a
       return 1;
 
+}
+
+string Dict::get_word(int i)const
+{
+  return words[i];
+}
+
+string Dict::get_phrase(int i)const
+{
+  return phrases[i];
+}
+
+string Dict::get_sentence(int i)const
+{
+  return sentences[i];
+}
+
+int Dict::get_word_count()const
+{
+  return word_count;
+}
+
+int Dict::get_phrase_count()const
+{
+  return phrase_count;
+}
+
+int Dict::get_sentence_count()const
+{
+  return sentence_count;
 }
 
 Dict::~Dict()

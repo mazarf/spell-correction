@@ -28,6 +28,13 @@ public:
   inline void remove_char(string s, char c);
   //void alphabetize(string *array, int size); // obsolete with qsort
   static int compare(const void* a, const void* b); // compares two strings, necessary for qsort
+  string get_word(int i)const;
+  string get_phrase(int i)const;
+  string get_sentence(int i)const;
+
+  int get_word_count()const;
+  int get_phrase_count()const;
+  int get_sentence_count()const;
 
 private:
 	/*

@@ -2,6 +2,8 @@
 #ifndef ELEMENT_H
 #define ELEMENT_H
 
+#include "dict.h"
+
 class Element
 {
 public:
