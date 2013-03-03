@@ -7,6 +7,12 @@ using namespace std;
 Word::Word(string s)
 {
 	input = s;
+
+  for(int i = 0; i < 10; i++)
+  {
+    corrections[i] = "";
+    para_corrections[i] = 100;
+  }
 }//constructor
 
 Word::~Word()
@@ -32,7 +38,7 @@ void Word::complete(const Dict &d)
 				}
 
 				para_completions[j] = h_distance;
-				completions[j] = input;
+				completions[j] = d.get_word(i);
 			}
 		}
 	}
@@ -41,13 +47,16 @@ void Word::complete(const Dict &d)
 void Word::check(const Dict &d)
 {
 	int h_distance = 0;
+  cout << input.length() << endl;
 	for(int i = 0; i < d.get_word_count(); i++)
 	{
-		h_distance = this->correction_hammer(d.get_word(i));
 
-		for(int j = 0; j < 9; j++)
+		h_distance = this->correction_hammer(d.get_word(i));
+    //if(h_distance <= 0) continue;
+
+		for(int j = 0; j < 10; j++)
 		{
-			if(h_distance <= para_corrections[j+1] && h_distance >= para_corrections[j])
+			/*if(h_distance <= para_corrections[j+1] && h_distance >= para_corrections[j])
 			{
 				for(int k = j; k < 9; k++)
 				{
@@ -57,8 +66,49 @@ void Word::check(const Dict &d)
 
 				para_corrections[j] = h_distance;
 				corrections[j] = input;
-			}
-		}
+			}*/
+
+      if(h_distance > para_corrections[j])
+        continue;
+      else
+        if(h_distance < para_corrections[j])
+        {
+          
+				  for(int k = 8; k >= j; k--)
+				  {
+					  para_corrections[k+1] = para_corrections[k];
+					  corrections[k+1] = corrections[k];
+				  }
+
+				  para_corrections[j] = h_distance;
+				  corrections[j] = d.get_word(i);
+          break;
+
+        }
+        else
+          if(h_distance == para_corrections[j])
+          {
+            if(d.get_word(i) < corrections[j])
+            {
+                 
+				      for(int k = 8; k >= j; k--)
+				      {
+					      para_corrections[k+1] = para_corrections[k];
+					      corrections[k+1] = corrections[k];
+				      }
+
+				      para_corrections[j] = h_distance;
+				      corrections[j] = d.get_word(i);
+
+              break;
+            }
+            else // doesn't come before, try next one
+              if(j < 9 && h_distance <= para_corrections[j + 1])
+                continue;
+              else
+                break;
+          }
+    }
 	}
 
 }//check
@@ -72,7 +122,7 @@ void Word::show() const
 	{
 		if(completions[i] == "")
 			break;
-		cout << completions[i] << endl;
+		cout << completions[i] << ' ' << para_completions[i] << endl;
 	}
 	cout << endl;
 
@@ -83,7 +133,7 @@ void Word::show() const
 	{
 		if(corrections[i] == "")
 			break;
-		cout << corrections[i] << endl;
+		cout << corrections[i] << ' ' << para_corrections[i] << endl;
 	}
 	cout << endl;
 
@@ -115,14 +165,15 @@ int Word::correction_hammer(string w)
 
 	else if(input.length() < w.length())
 	{
+    string temp_input = input;
 		for(unsigned int i = 0; i < w.length() - input.length(); i++)
 		{
-			input+= ' ';
+			temp_input+= ' '; // needs to be temp!
 		}
 
-		for(unsigned int i = 0; i < input.length(); i++)
+		for(unsigned int i = 0; i < temp_input.length(); i++)
 		{
-			if(input[i] != w[i])
+			if(temp_input[i] != w[i])
 				difference++;
 		}
 		return difference;

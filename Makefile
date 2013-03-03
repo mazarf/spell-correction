@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-Wall -ansi -O2 
+CFLAGS=-Wall -ansi -O2 -g
 
 TARGET=main
 HEADERS=element.h word.h phrase.h sentence.h dict.h
