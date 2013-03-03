@@ -358,6 +358,9 @@ inline void Dict::remove_char(string s, char c)
 
 } // alphabetize()*/
 
+/*
+    compare() taken from cplusplus.com
+*/
 int Dict::compare(const void* a, const void* b)
 {
 

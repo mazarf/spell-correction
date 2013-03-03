@@ -12,6 +12,9 @@ Word::Word(string s)
   {
     corrections[i] = "";
     para_corrections[i] = 100;
+
+    completions[i] = "";
+    para_completions[i] = 100;
   }
 }//constructor
 
@@ -22,24 +25,56 @@ Word::~Word()
 
 void Word::complete(const Dict &d)
 {
-	int h_distance = 0;
+	
 	for(int i = 0; i < d.get_word_count(); i++)
 	{
+		int h_distance = 0;
 		h_distance = this->completion_hammer(d.get_word(i));
+		/*cout << "h_distance: " << h_distance << endl;
+		cout << "d.get_word(i): " << d.get_word(i) << endl;*/
 
-		for(int j = 0; j < 9; j++)
+		if(h_distance == -1)
+			continue;
+		for(int j = 0; j < 10; j++)
 		{
-			if(h_distance <= para_completions[j+1] && h_distance >= para_completions[j])
-			{
-				for(int k = j; k < 9; k++)
+			if(h_distance > para_completions[j])
+				continue;
+			else
+				if(h_distance < para_completions[j])
 				{
-					para_completions[k+1] = para_completions[k];
-					completions[k+1] = completions[j];
-				}
+					for(int k = 8; k >= j; k--)
+					{
+						para_completions[k+1] = para_completions[k];
+						completions[k+1] = completions[k];
+					}
 
-				para_completions[j] = h_distance;
-				completions[j] = d.get_word(i);
-			}
+					para_completions[j] = h_distance;
+					completions[j] = d.get_word(i);
+					break;
+				}
+				else
+          			if(h_distance == para_completions[j])
+          			{
+            			if(d.get_word(i) < completions[j])
+            			{
+                 		  //makes space
+				      		for(int k = 8; k >= j; k--)
+				     		{
+					      		para_completions[k+1] = para_completions[k];
+					      		completions[k+1] = completions[k];
+				      		}
+				      		//puts new word and distance in space
+				      		para_completions[j] = h_distance;
+				      		completions[j] = d.get_word(i);
+
+              				break;
+           				}
+            			else // doesn't come before, try next one
+              				if(j < 9 && h_distance <= para_completions[j + 1])
+                				continue;
+              				else
+                				break;
+                	}
 		}
 	}
 }//complete
@@ -56,30 +91,18 @@ void Word::check(const Dict &d)
 
 		for(int j = 0; j < 10; j++)
 		{
-			/*if(h_distance <= para_corrections[j+1] && h_distance >= para_corrections[j])
-			{
-				for(int k = j; k < 9; k++)
-				{
-					para_corrections[k+1] = para_corrections[k];
-					corrections[k+1] = corrections[j];
-				}
-
-				para_corrections[j] = h_distance;
-				corrections[j] = input;
-			}*/
-
       if(h_distance > para_corrections[j])
         continue;
       else
         if(h_distance < para_corrections[j])
         {
-          
+          		  //makes space
 				  for(int k = 8; k >= j; k--)
 				  {
 					  para_corrections[k+1] = para_corrections[k];
 					  corrections[k+1] = corrections[k];
 				  }
-
+				  //puts word and distance in new space
 				  para_corrections[j] = h_distance;
 				  corrections[j] = d.get_word(i);
           break;
@@ -90,13 +113,13 @@ void Word::check(const Dict &d)
           {
             if(d.get_word(i) < corrections[j])
             {
-                 
+                 	  //makes space
 				      for(int k = 8; k >= j; k--)
 				      {
 					      para_corrections[k+1] = para_corrections[k];
 					      corrections[k+1] = corrections[k];
 				      }
-
+				      //puts new word and distance in space
 				      para_corrections[j] = h_distance;
 				      corrections[j] = d.get_word(i);
 
@@ -122,18 +145,18 @@ void Word::show() const
 	{
 		if(completions[i] == "")
 			break;
-		cout << completions[i] << ' ' << para_completions[i] << endl;
+		cout << completions[i] << endl;
 	}
 	cout << endl;
 
-	cout << "WORD correction for : " << input << endl;
+	cout << "WORD correction for: " << input << endl;
 	cout << "------------------------------\n";
 
 	for(int i = 0; i < 10; i++)
 	{
 		if(corrections[i] == "")
 			break;
-		cout << corrections[i] << ' ' << para_corrections[i] << endl;
+		cout << corrections[i] << endl;
 	}
 	cout << endl;
 
@@ -200,7 +223,18 @@ int Word::correction_hammer(string w)
 
 bool Word::has_same_start(string s1, string s2)
 {
-	if(s1.length() <= s2.length())
+	/*if(s1.length() <= s2.length())
+	{*/
+		for(unsigned int i = 0; i < s1.length(); i++)
+		{
+			if(s1[i] != s2[i])
+				return false;
+		}
+
+		return true;
+	//}
+
+	/*if(s2.length() < s1.length())
 	{
 		for(unsigned int i = 0; i < s1.length(); i++)
 		{
@@ -209,18 +243,7 @@ bool Word::has_same_start(string s1, string s2)
 		}
 
 		return true;
-	}
-
-	if(s2.length() < s1.length())
-	{
-		for(unsigned int i = 0; i < s2.length(); i++)
-		{
-			if(s1[i] != s2[i])
-				return false;
-		}
-
-		return true;
-	}
+	}*/
 	cout<<"if it gets to here, ya done messed up";
 	int poop;
 	cin >> poop;
