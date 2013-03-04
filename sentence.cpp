@@ -81,7 +81,7 @@ void Sentence::complete(const Dict &d)
 void Sentence::check(const Dict &d)
 {
 	int h_distance = 0;
-  cout << input.length() << endl;
+  //cout << input.length() << endl;
 	for(int i = 0; i < d.get_sentence_count(); i++)
 	{
 
@@ -155,7 +155,7 @@ void Sentence::show() const
 	{
 		if(corrections[i] == "")
 			break;
-		cout << corrections[i] << ' ' << para_corrections[i] << endl;
+		cout << corrections[i] << endl;
 	}
 	cout << endl;
 

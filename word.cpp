@@ -82,7 +82,7 @@ void Word::complete(const Dict &d)
 void Word::check(const Dict &d)
 {
 	int h_distance = 0;
-  cout << input.length() << endl;
+  //cout << input.length() << endl;
 	for(int i = 0; i < d.get_word_count(); i++)
 	{
 

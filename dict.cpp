@@ -212,7 +212,7 @@ void Dict::store_sentences()
   for(int i = 0; i < current_size && !reference.eof(); i++)
   {
 
-    if(reference.peek() == ' ') // skip spaces
+    while(reference.peek() == ' ' || reference.peek() == '\n') // skip spaces
       reference.ignore();
 
     reference.getline(temp, 9999, '.');

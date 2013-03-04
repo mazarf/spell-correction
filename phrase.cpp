@@ -80,7 +80,7 @@ void Phrase::complete(const Dict &d)
 void Phrase::check(const Dict &d)
 {
 	int h_distance = 0;
-  cout << input.length() << endl;
+  //cout << input.length() << endl;
 	for(int i = 0; i < d.get_phrase_count(); i++)
 	{
 
